@@ -1,0 +1,45 @@
+<app-menu-bar></app-menu-bar>
+<br>
+<div *ngIf="userStories.length!=0">
+<ul *ngFor="let story of userStories">
+  <li>{{story}}</li>
+</ul>
+</div>
+<div *ngIf="userStories.length==0">
+  <b>Consult admin to add the memories.</b>
+  </div>
+<div *ngIf="userGroup==1 && storyCount!=4">
+  <p *ngIf="!showStory" style="background-color: lightblue;border-radius: 5px; padding: 10px;">
+    Please reflect on your current pain for 15 seconds with as much vivid detail as possible
+  </p>
+  <p *ngIf="showStory" style="background-color: lightblue;border-radius: 5px; padding: 10px;">
+    Please concentrate to memorize one of the stories.
+  </p>
+<div style="padding-left: 350px;"><input style="font-size: 150px;" type="submit" [disabled]="counter!='START'" (click)="startCountdown()" [(ngModel)]="counter"></div> 
+</div> 
+<div *ngIf="userGroup==1 && storyCount==4">
+  <p style="background-color: lightblue;border-radius: 5px; padding: 10px;">
+    Thank you for your participation.
+     Please set a reminder or alarm to ensure you complete this activity 4 separate times each day.
+  </p>
+</div>
+
+
+<div *ngIf="userGroup==2">
+  <div *ngIf="flag2!=true">
+  <p style="background-color: lightblue;border-radius: 5px; padding: 10px;">
+    Set a timer for 2 minutes on your phone or watch and try to focus your attention on something in the room or environment. Try to think as vividly as possible about that thing for the entire 2 minutes. 
+    Notice the colors, the shapes, the textures, or anything else. 
+    Act as if it was the first time you have ever seen the object and you are inspecting it.
+  </p>
+  <div style="padding-left: 350px;"><input style="font-size: 150px;" type="submit" [disabled]="counter!='START'" (click)="startCountdown()" [(ngModel)]="counter"></div> 
+  </div>
+  <div *ngIf="flag2==true">
+    <p style="background-color: lightblue;border-radius: 5px; padding: 10px;">
+      Thank you for your participation.
+       Please set a reminder or alarm to ensure you complete this activity at least 4 separate times each 
+       day and any other times you feel pain.
+    </p>
+  </div>
+</div> 
+

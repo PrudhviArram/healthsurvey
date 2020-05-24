@@ -1,0 +1,193 @@
+<div><h1 style="text-align:left;float:left;">Admin Portal</h1>
+  <h1 style="text-align:left;float:right;" class="logout underlineHover" (click)="onLogout()">LOGOUT</h1>
+  <hr style="clear:both;"/>
+</div>
+<br>
+<div>
+
+  <button class="btn btn-success btn-block" (click)="openPDF()">Open PDF</button>
+  <div id="htmlData" #htmlData> 
+<p-tabView > 
+
+  <p-tabPanel header="Registered Users">
+    <p-table #dt *ngIf="registeredUsers!=undefined" [columns]="userCols" dataKey="_id" [value]="registeredUsers" [paginator]="true" [autoLayout]="true" [resizableColumns]="true" [paginator]="true" [rows]="10">
+      <ng-template pTemplate="caption">
+        <div class="ui-helper-clearfix" >
+          <span style="float: left;">
+          <button type="button" pButton iconPos="left" label="CSV" (click)="dt.exportCSV()" style="margin-right: 0.5em;">
+            <i class="pi pi-file-o" style="margin:4px 4px 0 0"></i>Download</button>
+          </span>   
+          <span style="float: right;">
+            <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
+            <input type="text" pInputText size="20" placeholder="Global Search" (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
+          </span>
+        </div>
+    </ng-template>
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th></th>
+            <th *ngFor="let col of columns" pResizableColumn [pSortableColumn]="col.field">
+                {{col.header}}
+                <p-sortIcon [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+            </th>
+        </tr> 
+    </ng-template>
+      <ng-template pTemplate="body" let-user let-columns="columns">
+          
+        <tr *ngIf="user.participantCode!='admin'">
+              <td>
+                  <a href="#" [pRowToggler]="user">
+                      <i [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
+                  </a>
+              </td>
+              <td >{{user.participantCode}}</td>
+              <td>{{user.fullName}}</td>
+              <td>{{user.email}}</td>
+              
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="rowexpansion" let-user let-columns="columns">
+        <tr> 
+          <td [attr.colspan]="columns.length+1">
+        <span *ngIf="user.userStories.length==0">
+          No Stories Added
+        </span>
+        </td>
+      </tr>
+
+        <span *ngIf="user.userStories.length!=0"> 
+          <tr *ngFor="let s of user.userStories">
+           <td [attr.colspan]="columns.length+1"><div  class="ui-g ui-fluid">{{s}}</div></td>
+          </tr>
+        </span>
+    </ng-template>
+    </p-table>
+  </p-tabPanel>
+
+
+  <p-tabPanel header="Demographic Details">
+      
+    <p-table *ngIf="demoGraphicDetails!=undefined"  [columns]="cols" [value]="demoGraphicDetails" [autoLayout]="true" [resizableColumns]="true" [paginator]="true" [rows]="10"  #dt2>
+      <ng-template pTemplate="caption">
+        <div class="ui-helper-clearfix" >
+          <span style="float: left;">
+          <button type="button" pButton iconPos="left" label="CSV" (click)="dt2.exportCSV()" style="margin-right: 0.5em;">
+            <i class="pi pi-file-o" style="margin:4px 4px 0 0"></i>Download</button>
+          </span>   
+          <span style="float: right;">
+            <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
+            <input type="text" pInputText size="20" placeholder="Global Search" (input)="dt2.filterGlobal($event.target.value, 'contains')" style="width:auto">
+          </span>
+        </div>
+    </ng-template>
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th *ngFor="let col of columns" pResizableColumn [pSortableColumn]="col.field">
+              {{col.header}}
+              <p-sortIcon [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr>
+            <td *ngFor="let col of columns">
+                    {{rowData[col.field]}}
+            </td>
+        </tr>
+    </ng-template>
+    </p-table>
+  </p-tabPanel>
+
+
+  <p-tabPanel header="Submitted Survey">
+    <p-table *ngIf="surveyDetails!=undefined"  [columns]="surveyCols" [value]="surveyDetails" dataKey="_id" [autoLayout]="true" [resizableColumns]="true" [paginator]="true" [rows]="10"  #dt3>
+      <ng-template pTemplate="caption">
+        <div class="ui-helper-clearfix" >
+          <span style="float: left;">
+          <button type="button" pButton iconPos="left" label="CSV" (click)="dt3.exportCSV()" style="margin-right: 0.5em;">
+            <i class="pi pi-file-o" style="margin:4px 4px 0 0"></i>Download</button>
+          </span>   
+          <span style="float: right;">
+            <i class="pi pi-search" style="margin:4px 4px 0 0"></i>
+            <input type="text" pInputText size="20" placeholder="Global Search" (input)="dt3.filterGlobal($event.target.value, 'contains')" style="width:auto">
+          </span>
+        </div>
+    </ng-template>
+      <ng-template pTemplate="header" let-columns>
+        <tr><th></th>
+            <th *ngFor="let col of columns" pResizableColumn [pSortableColumn]="col.field">
+              {{col.header}}
+              <p-sortIcon [field]="col.field" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr>
+          <td>
+            <a href="#" [pRowToggler]="rowData">
+                <i [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
+            </a>
+        </td>
+            <td *ngFor="let col of columns">
+                    {{rowData[col.field]}}
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="rowexpansion" let-rowData let-columns="columns">
+      
+        <h1><b>Panic Scale</b></h1>
+          <tr *ngFor="let s of rowData.painScale">
+            <td [attr.colspan]="columns.length">{{s.q}}</td>
+            <td style="width: 50px;">{{s.ans}}</td>
+          </tr>
+        <br>
+        <h1><b>Rumination Scale</b></h1>
+          <tr *ngFor="let s of rowData.ruminationScale">
+            <td [attr.colspan]="columns.length">{{s.q}}</td>
+            <td style="width: 50px;">{{s.ans}}</td>
+          </tr>
+        <br>
+        <h1><b>Control Scale</b></h1>
+          <tr *ngFor="let s of rowData.controlScale">
+            <td [attr.colspan]="columns.length">{{s.q}}</td>
+            <td style="width: 50px;">{{s.ans}}</td>
+          </tr>
+        <br>
+        <h1>Feedback : </h1><b>{{rowData.feedback}}</b>
+    </ng-template>
+    </p-table> 
+  </p-tabPanel>
+
+  <p-tabPanel header="Add Memories">
+    <form #storyForm="ngForm" (ngSubmit)="storyForm.valid && story(storyForm)">
+      <input style="width: 50%;" type="text" name="email" #email="ngModel" [(ngModel)]="form.email" placeholder="Email" [pattern]="emailRegex" required
+      [ngClass]="{'invalid-textbox' :storyForm.submitted && !email.valid }">
+    <small *ngIf="storyForm.submitted && email.errors">
+      <label *ngIf="email.errors.pattern" class="validation-message">Invalid email address.</label>
+      <label *ngIf="email.errors.required" class="validation-message">This field is required.</label>
+    </small>
+    <br>
+      1. <input style="width: 50%;" type="text" name="story1" #story1="ngModel" [(ngModel)]="form.story1" placeholder="Add Memory"  required
+        [ngClass]="{'invalid-textbox' :storyForm.submitted && !story1.valid }">
+        <small *ngIf="storyForm.submitted && story1.errors">
+          <label *ngIf="story1.errors.required" class="validation-message">This field is required.</label>
+      </small><br> 
+      
+      2. <input style="width: 50%;" type="text" name="story2" #story2="ngModel" [(ngModel)]="form.story2" placeholder="Add Memory" required 
+        [ngClass]="{'invalid-textbox' :storyForm.submitted && !story2.valid }">
+      <small *ngIf="storyForm.submitted && story2.errors">
+        <label *ngIf="story2.errors.required" class="validation-message">This field is required.</label>
+      </small><br>
+      3. <input style="width: 50%;" type="text" name="story3" #story3="ngModel" [(ngModel)]="form.story3" placeholder="Add Memory" required 
+        [ngClass]="{'invalid-textbox' :storyForm.submitted && !story3.valid }">
+      <small *ngIf="storyForm.submitted && story3.errors">
+        <label class="validation-message">This field is required.</label>
+      </small><br>
+      <input type="submit" value="ADD">
+      <div *ngIf="success!=null" class="success">{{success}}</div>
+    </form>
+
+  </p-tabPanel>
+</p-tabView>
+</div>
+</div>

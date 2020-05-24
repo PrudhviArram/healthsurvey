@@ -1,0 +1,256 @@
+<app-menu-bar *ngIf='userName!=undefined' ></app-menu-bar>
+
+<div *ngIf="showDemographic" style="background-color: aliceblue;">
+    <br>
+<form #demographicForm="ngForm" (ngSubmit)="demographicForm.valid && onSubmit(demographicForm)">
+    <table>
+        <caption><h1><b>Demographic Details</b></h1></caption>
+        <tbody>
+            <tr class="form-group">
+                <td>Please enter your age below.</td>
+                <td><input type="number" name="age" #age="ngModel" [(ngModel)]="demoDetails.age" placeholder="Age"  required
+                    [ngClass]="{'invalid-textbox' :demographicForm.submitted && !age.valid }">
+                    <small *ngIf="demographicForm.submitted && age.errors">
+                        <label *ngIf="demographicForm.submitted && age.errors?.pattern" class="validation-message">Invalid Age</label>
+                        <label *ngIf="age.errors.required" class="validation-message">This field is required.</label>
+                    </small>
+                     </td>
+            </tr>
+            <tr class="form-group">
+                <td>Which category indicates your race? (Select all that apply)</td>
+                <td><input type="checkbox" name="a" (change)="raceCheck($event,'White')">White<br>
+                    <input type="checkbox" name="b" (change)="raceCheck($event,'Black or African-American')">Black or African-American <br>
+                    <input type="checkbox" name="c" (change)="raceCheck($event,'Latino/Hispanic')">Latino/Hispanic<br>
+                    <input type="checkbox" name="d" (change)="raceCheck($event,'Asian')">Asian<br>
+                    <input type="checkbox" name="e" (change)="raceCheck($event,'American Indian or Alaskan Native')">American Indian or Alaskan Native<br>
+                    <input type="checkbox" name="f" (change)="raceCheck($event,'Native Hawaiian or other Pacific islander')">Native Hawaiian or other Pacific islander<br>
+                    <input type="checkbox" name="g" (change)="raceCheck($event,'Some other race (please specify)')">Some other race (please specify)
+                </td>
+            </tr>
+            <tr class="form-group">
+                <td>What is your gender?</td>
+                <td><input type="radio" [(ngModel)]="demoDetails.gender" #gender="ngModel" name="gender" value="Female" required />Female<br>
+                    <input type="radio" [(ngModel)]="demoDetails.gender" #gender="ngModel" name="gender" value="Male" />Male<br>
+                    <input type="radio" [(ngModel)]="demoDetails.gender" #gender="ngModel" name="gender" value="Other/Prefer not to say" />Other/Prefer not to say
+                    <small *ngIf="demographicForm.submitted && gender.errors">
+                        <label *ngIf="gender.errors.required" class="validation-message">This field is required.</label>
+                    </small>
+                </td>
+            </tr>            
+            <tr class="form-group">
+                <td>Where do you experience most of your chronic pain?</td>
+                <td>
+                    <input type="radio" [(ngModel)]="demoDetails.chronicPain" #chronicPain="ngModel" name="chronicPain" value="Neck" required>Neck<br>
+                    <input type="radio" [(ngModel)]="demoDetails.chronicPain" #chronicPain="ngModel" name="chronicPain" value="Back">Back<br>
+                    <input type="radio" [(ngModel)]="demoDetails.chronicPain" #chronicPain="ngModel" name="chronicPain" value="Arms/Shoulders">Arms/Shoulders<br>
+                    <input type="radio" [(ngModel)]="demoDetails.chronicPain" #chronicPain="ngModel" name="chronicPain" value="Hands">Hands<br>
+                    <input type="radio" [(ngModel)]="demoDetails.chronicPain" #chronicPain="ngModel" name="chronicPain" value="Legs">Legs<br>
+                    <input type="radio" [(ngModel)]="demoDetails.chronicPain" #chronicPain="ngModel" name="chronicPain" value="Pelvis">Pelvis<br>
+                    <input type="radio" [(ngModel)]="demoDetails.chronicPain" #chronicPain="ngModel" name="chronicPain" value="Ankles/Feet">Ankles/Feet
+                    <small *ngIf="demographicForm.submitted && chronicPain.errors">
+                        <label *ngIf="chronicPain.errors.required" class="validation-message">This field is required.</label>
+                    </small>
+                </td>
+            </tr>
+            <tr class="form-group">
+                <td>How long have you experienced chronic pain in the body part listed above?</td>
+                <td>Years:
+                    <select name="year" [(ngModel)]="years"> 
+                        <option hidden value="undefined">select</option>
+                        <option value="undefined">select</option>
+                        <option *ngFor="let y of yearsArray" [value]="y">{{y}}</option> 
+                    </select>
+                    Months:
+                    <select name="months" [(ngModel)]="months"> 
+                        <option hidden value="undefined">select</option>
+                        <option value="undefined">select</option>
+                        <option *ngFor="let y of monthsArray" [value]="y">{{y}}</option> 
+                    </select>
+                    Weeks:
+                    <select name="weeks" [(ngModel)]="weeks"> 
+                        <option hidden value="undefined">select</option>
+                        <option value="undefined">select</option>
+                        <option *ngFor="let y of weeksArray" [value]="y">{{y}}</option> 
+                    </select>
+                    Days:
+                    <select name="days" [(ngModel)]="days"> 
+                        <option hidden value="undefined">select</option>
+                        <option value="undefined">select</option>
+                        <option *ngFor="let y of daysArray" [value]="y">{{y}}</option> 
+                    </select>
+                    <br>
+                    <label *ngIf="panicError" class="validation-message">Please select atleast one option</label>
+                </td>
+            </tr>
+            <tr class="form-group">
+                <td>What is the highest level of school you have completed or the highest degree you have received?</td>
+                <td>
+                    <input type="radio" [(ngModel)]="demoDetails.degree" #degree="ngModel" name="degree" value="Less than high school degree" required>Less than high school degree<br>
+                    <input type="radio" [(ngModel)]="demoDetails.degree" #degree="ngModel" name="degree" value="High school degree or equivalent (e.g., GED)">High school degree or equivalent (e.g., GED)<br>
+                    <input type="radio" [(ngModel)]="demoDetails.degree" #degree="ngModel" name="degree" value="Some college but no degree">Some college but no degree<br>
+                    <input type="radio" [(ngModel)]="demoDetails.degree" #degree="ngModel" name="degree" value="Associate degree">Associate degree<br>
+                    <input type="radio" [(ngModel)]="demoDetails.degree" #degree="ngModel" name="degree" value="Bachelor degree">Bachelor degree<br>
+                    <input type="radio" [(ngModel)]="demoDetails.degree" #degree="ngModel" name="degree" value="Graduate degree">Graduate degree                            
+                    <small *ngIf="demographicForm.submitted && degree.errors">
+                        <label *ngIf="degree.errors.required" class="validation-message">This field is required.</label>
+                    </small>
+                </td>
+            </tr>
+            <tr class="form-group">
+                <td>Which of the following categories best describes your employment status?</td>
+                <td>
+                    <input type="radio" [(ngModel)]="demoDetails.employment" #employment="ngModel" name="employment" value="Employed, working 1-39 hours per week" required>Employed, working 1-39 hours per week<br>
+                    <input type="radio" [(ngModel)]="demoDetails.employment" #employment="ngModel" name="employment" value="Employed, working 40 or more hours per week">Employed, working 40 or more hours per week<br>
+                    <input type="radio" [(ngModel)]="demoDetails.employment" #employment="ngModel" name="employment" value="Not employed, looking for work">Not employed, looking for work<br>
+                    <input type="radio" [(ngModel)]="demoDetails.employment" #employment="ngModel" name="employment" value="Not employed, NOT looking for work">Not employed, NOT looking for work<br>
+                    <input type="radio" [(ngModel)]="demoDetails.employment" #employment="ngModel" name="employment" value="Retired">Retired<br>
+                    <input type="radio" [(ngModel)]="demoDetails.employment" #employment="ngModel" name="employment" value="Disabled, not able to work">Disabled, not able to work
+                    <small *ngIf="demographicForm.submitted && employment.errors">
+                        <label *ngIf="employment.errors.required" class="validation-message">This field is required.</label>
+                    </small>
+                </td>
+            </tr>
+            <tr class="form-group" *ngIf='userDetails.participantCode==100003'>
+                <td>How do you typically manage your pain? Please describe all methods to reduce your pain.?</td>
+                <td>
+                    <textarea maxlength="500"></textarea>
+                </td>
+            </tr>
+            <tr class="form-group" *ngIf='userDetails.participantCode==100003'>
+                <td>How did you manage your pain during the two weeks?<br> Please describe all methods you used to reduce your pain.</td>
+                <td>
+                    <textarea maxlength="500"></textarea>
+                </td>
+            </tr>
+
+            <tr ><td colspan="2" style="text-align: center;"><input type="submit" value="submit">
+                <label class="success" *ngIf="demographicMessage">
+                    Data submitted successfully
+                </label>
+            </td></tr>
+
+        </tbody>
+
+    
+    </table>
+  </form>
+</div>
+
+<div *ngIf="!showDemographic && !showAlert && !showFeedback" style="background-color: aliceblue;">
+    <br>
+<div *ngIf='pagenumber==1'>
+<form #painForm="ngForm" (ngSubmit)="painForm.valid && next()">
+    <table>  
+        <caption><h1><b>Pain Scale</b></h1></caption>
+        <small style="color:white;float: right;background-color:maroon;"><sup>****</sup>Note : where 0 is 'no pain' and 10 is 'pain as bad as it could be'<sup>****</sup></small>
+        <tbody>
+            <tr *ngFor="let p of painQuestions">
+                <td style="width: 70%;">{{p.q}}</td>
+                <td>
+                    <input type="radio" [(ngModel)]="p.ans" name={{p.q}} value=1 required>1
+                    <input type="radio" [(ngModel)]="p.ans" name={{p.q}} value=2>2
+                    <input type="radio" [(ngModel)]="p.ans" name={{p.q}} value=3>3
+                    <input type="radio" [(ngModel)]="p.ans" name={{p.q}} value=4>4
+                    <input type="radio" [(ngModel)]="p.ans" name={{p.q}} value=5>5
+                    <input type="radio" [(ngModel)]="p.ans" name={{p.q}} value=6>6
+                    <input type="radio" [(ngModel)]="p.ans" name={{p.q}} value=7>7
+                    <input type="radio" [(ngModel)]="p.ans" name={{p.q}} value=8>8
+                    <input type="radio" [(ngModel)]="p.ans" name={{p.q}} value=9>9
+                    <input type="radio" [(ngModel)]="p.ans" name={{p.q}} value=10>10
+                    
+                 </td>
+            </tr>
+            
+            <tr ><td colspan="2" style="text-align: center;"><input type="submit" value="Next"></td></tr>
+        </tbody>
+
+    
+    </table>
+  </form>
+</div>
+<div *ngIf='pagenumber==2'>
+    <form #Rumination="ngForm" (ngSubmit)="Rumination.valid && next()">
+        <table>  
+            <caption><h1><b>Rumination Scale</b></h1></caption>
+            <b><small style="color: rgb(99, 6, 6);"><sup>****</sup>We are interested in pain and thinking. Please tell us how far the following statements describe your experience when you are in pain. 
+                How applicable are they to you?<sup>****</sup></small></b>
+            <tbody>
+                <tr *ngFor="let p of ruminationAuestions">
+                    <td style="width: 70%;">{{p.q}}</td>
+                    <td>
+                        <input type="radio" [(ngModel)]="p.ans" name={{p.q}} value=1 required>1
+                        <input type="radio" [(ngModel)]="p.ans" name={{p.q}} value=2>2
+                        <input type="radio" [(ngModel)]="p.ans" name={{p.q}} value=3>3
+                        <input type="radio" [(ngModel)]="p.ans" name={{p.q}} value=4>4
+                        <input type="radio" [(ngModel)]="p.ans" name={{p.q}} value=5>5
+                        <input type="radio" [(ngModel)]="p.ans" name={{p.q}} value=6>6
+                        <input type="radio" [(ngModel)]="p.ans" name={{p.q}} value=7>7
+                        <input type="radio" [(ngModel)]="p.ans" name={{p.q}} value=8>8
+                        <input type="radio" [(ngModel)]="p.ans" name={{p.q}} value=9>9
+                        <input type="radio" [(ngModel)]="p.ans" name={{p.q}} value=10>10
+                     </td>
+                </tr>
+                
+                <tr ><td colspan="2" style="text-align: center;">
+                    <input type="button" (click)="prev()" value="Prev">
+                    <input type="submit" value="Next">
+                </td></tr>
+            </tbody>
+    
+        
+        </table>
+      </form>
+    </div>
+    <div *ngIf='pagenumber==3'>
+        <form #Control="ngForm" (ngSubmit)="Control.valid && painSubmit()">
+            <table>  
+                <caption><h1><b>Control Scale</b></h1></caption>
+                <b><small style="color: rgb(99, 6, 6);"><sup>****</sup>Then questions about control, hopefulness, etc.<sup>****</sup></small></b>
+                <tbody>
+                    <tr *ngFor="let p of controlQuestions">
+                        <td style="width: 70%;">{{p.q}}</td>
+                        <td>
+                            <input type="radio" [(ngModel)]="p.ans" name={{p.q}} value=1 required>1
+                            <input type="radio" [(ngModel)]="p.ans" name={{p.q}} value=2>2
+                            <input type="radio" [(ngModel)]="p.ans" name={{p.q}} value=3>3
+                            <input type="radio" [(ngModel)]="p.ans" name={{p.q}} value=4>4
+                            <input type="radio" [(ngModel)]="p.ans" name={{p.q}} value=5>5
+                            <input type="radio" [(ngModel)]="p.ans" name={{p.q}} value=6>6
+                            <input type="radio" [(ngModel)]="p.ans" name={{p.q}} value=7>7
+                            <input type="radio" [(ngModel)]="p.ans" name={{p.q}} value=8>8
+                            <input type="radio" [(ngModel)]="p.ans" name={{p.q}} value=9>9
+                            <input type="radio" [(ngModel)]="p.ans" name={{p.q}} value=10>10
+                         </td>
+                    </tr>
+                     
+                    <tr ><td colspan="2" style="text-align: center;">
+                        <input type="button" (click)="prev()" value="Prev">
+                        <input type="submit" value="Submit">
+                    </td></tr>
+                </tbody>
+        
+            
+            </table>
+          </form>
+        </div>
+</div>
+<div *ngIf="showAlert">
+    <p style="background-color: lightblue;border-radius: 5px; padding: 10px;">
+           Please visit again after <b style="font-size: 50px;">{{remainingDays}}</b> days to complete the survey.
+        <br>click <a style="color: red;" routerLink="/memories">here</a> to go to activity screen.
+    </p>
+</div>
+<div *ngIf="showFeedback">
+    <br><br>
+    <span class="ui-float-label">
+        <textarea id="float-input" rows="5" cols="60" [(ngModel)]="feedback" pInputTextarea></textarea>
+        <label style="color: black;" for="float-input">Please tell how did you feel your pain during last week ?</label>
+        
+    </span>
+    
+    <button pButton type="button" label="Submit" (click)="submitFeedback()" class="ui-button-rounded"></button>
+    <label *ngIf="feedbackRequired" class="validation-message">This field is required.</label>
+    <label class="success" *ngIf="feedbackMessage">
+       Feedback submitted successfully
+    </label>
+</div>
